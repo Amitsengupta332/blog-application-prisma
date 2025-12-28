@@ -13,6 +13,9 @@ const createPost = async (req: Request, res: Response) => {
   }
 };
 
+const getAllPost = async (req: Request, res: Response) => {};
+
 export const postController = {
   createPost,
+  getAllPost,
 };
