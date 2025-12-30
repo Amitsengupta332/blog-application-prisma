@@ -44,20 +44,6 @@ export const auth = betterAuth({
   emailVerification: {
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
-    // sendVerificationEmail: async ({ user, url, token }, request) => {
-    //   //  console.log('verification done.........')
-
-    //    const verificationUrl = `${process.env.APP_URL}/verify-email?token=${token}`
-    //   const info = await transporter.sendMail({
-    //       from: '"Prisma Blog" <prismablog@ph.com>',
-    //     to: "amitsengupta332@gmail.com",
-    //     subject: "Hello ✔",
-    //     text: "Hello world?", // Plain-text version of the message
-    //     html: "<b>Hello world?</b>", // HTML version of the message
-    //   });
-
-    //   console.log("Message sent:", info.messageId);
-    // },
     sendVerificationEmail: async ({ user, url, token }, request) => {
       try {
         const verificationUrl = `${process.env.APP_URL}/verify-email?token=${token}`;
