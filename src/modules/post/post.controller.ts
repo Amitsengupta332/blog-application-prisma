@@ -19,7 +19,17 @@ const createPost = async (req: Request, res: Response) => {
   }
 };
 
-const getAllPost = async (req: Request, res: Response) => {};
+const getAllPost = async (req: Request, res: Response) => {
+  try {
+    const result = await postService.getAllPost();
+    res.status(201).json(result);
+  } catch (e) {
+    res.status(400).json({
+      error: "Post creation failed",
+      details: e,
+    });
+  }
+};
 
 export const postController = {
   createPost,
