@@ -29,26 +29,38 @@ const getCommentById = async (req: Request, res: Response) => {
   }
 };
 
-
 const getCommentsByAuthor = async (req: Request, res: Response) => {
-    try {
-        const { authorId } = req.params
-        const result = await CommentService.getCommentsByAuthor(authorId as string)
-        res.status(200).json(result)
-    } catch (e) {
-        res.status(400).json({
-            error: "Comment fetched failed",
-            details: e
-        })
-    }
-}
+  try {
+    const { authorId } = req.params;
+    const result = await CommentService.getCommentsByAuthor(authorId as string);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(400).json({
+      error: "Comment fetched failed",
+      details: e,
+    });
+  }
+};
 
-
+const deleteComment = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const { commentId } = req.params;
+     const result = await CommentService.deleteComment(commentId as string, user?.id as string)
+    res.status(200).json(result);
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({
+      error: "Comment delete failed!",
+      details: e,
+    });
+  }
+};
 
 export const CommentController = {
   createComment,
   getCommentById,
   getCommentsByAuthor,
-  // deleteComment,
+  deleteComment,
   // updateComment
 };
