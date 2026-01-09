@@ -216,39 +216,80 @@ const getMyPosts = async (authorId: string) => {
   return result;
 };
 
-const updatePost = async (postId: string, data: Partial<Post>, authorId: string, isAdmin: boolean) => {
-    const postData = await prisma.post.findUniqueOrThrow({
-        where: {
-            id: postId
-        },
-        select: {
-            id: true,
-            authorId: true
-        }
-    })
+//**
+// user - sudhu nijar post update korta parbe, isFeatured update korta parbe na
+// admin - sobar post update korta parbe.
+// */
 
-    if (!isAdmin && (postData.authorId !== authorId)) {
-        throw new Error("You are not the owner/creator of the post!")
+const updatePost = async (
+  postId: string,
+  data: Partial<Post>,
+  authorId: string,
+  isAdmin: boolean
+) => {
+  const postData = await prisma.post.findUniqueOrThrow({
+    where: {
+      id: postId,
+    },
+    select: {
+      id: true,
+      authorId: true,
+    },
+  });
+
+  if (!isAdmin && postData.authorId !== authorId) {
+    throw new Error("You are not the owner/creator of the post!");
+  }
+
+  if (!isAdmin) {
+    delete data.isFeatured;
+  }
+
+  const result = await prisma.post.update({
+    where: {
+      id: postData.id,
+    },
+    data,
+  });
+
+  return result;
+};
+
+//**
+// 1. user - nijar created post delete korta parbe
+// 2. admin - sobar post delete korta parbe
+// */
+
+const deletePost = async (
+  postId: string,
+  authorId: string,
+  isAdmin: boolean
+) => {
+  const postData = await prisma.post.findUniqueOrThrow({
+    where: {
+      id: postId,
+    },
+    select: {
+      id: true,
+      authorId: true,
+    },
+  });
+
+  if (!isAdmin && postData.authorId !== authorId) {
+    throw new Error("You are not the owner/creator of the post!");
+  }
+
+  return await prisma.post.delete({
+    where:{
+      id: postId
     }
-
-    if (!isAdmin) {
-        delete data.isFeatured
-    }
-
-    const result = await prisma.post.update({
-        where: {
-            id: postData.id
-        },
-        data
-    })
-
-    return result;
-
-}
+  })
+};
 export const postService = {
   createPost,
   getAllPost,
   getPostById,
   getMyPosts,
   updatePost,
+  deletePost
 };
