@@ -11,7 +11,7 @@ const app: Application = express();
 // after the error
 app.use(
   cors({
-    origin: process.env.APP_URL || "http://localhost:4000",
+    origin: process.env.APP_URL || "http://localhost:3000",
     credentials: true,
   })
 );
